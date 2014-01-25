@@ -51,7 +51,7 @@
   function setLoginFunc() {
     FB.login(function(response) {
      // handle the response
-     $('#success_title').html('Success login =)');
+     location.reload();
     }, {scope: 'basic_info, email, public_profile,user_photos, user_friends'});
   }
 </script>
