@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head></head>
+<head>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+</head>
 <body>
 <div id="fb-root"></div>
 <script>
@@ -38,7 +40,10 @@
       // of whether they are logged into the app. If they aren't then they'll see the Login
       // dialog right after they log in to Facebook. 
       // The same caveats as above apply to the FB.login() call here.
-      FB.login();
+      FB.login(function(response) {
+       // handle the response
+       $('#success_title').html('Success login =)');
+      }, {scope: 'email,photos'});
     }
   });
   };
@@ -68,5 +73,6 @@
   present a graphical Login button that triggers the FB.login() function when clicked. -->
 
 <fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>
+<h1 id='success_title'></h1>
 </body>
 </html>
