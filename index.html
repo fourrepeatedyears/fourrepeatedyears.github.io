@@ -6,50 +6,27 @@
 <body>
 <div id="fb-root"></div>
 <script>
-  window.fbAsyncInit = function() {
-  FB.init({
-    appId      : '1480164085544279',
-    status     : true, // check login status
-    cookie     : true, // enable cookies to allow the server to access the session
-    xfbml      : true  // parse XFBML
-  });
+  var loggedIn = false;
 
-  // Here we subscribe to the auth.authResponseChange JavaScript event. This event is fired
-  // for any authentication related change, such as login, logout or session refresh. This means that
-  // whenever someone who was previously logged out tries to log in again, the correct case below 
-  // will be handled. 
-  FB.getLoginStatus(function(response) {
-    console.log(response);
-    // Here we specify what we do with the response anytime this event occurs. 
-    if (response.status === 'connected') {
-      // The response object is returned with a status field that lets the app know the current
-      // login status of the person. In this case, we're handling the situation where they 
-      // have logged in to the app.
-      testAPI();
-    } else if (response.status === 'not_authorized') {
-      // In this case, the person is logged into Facebook, but not into the app, so we call
-      // FB.login() to prompt them to do so. 
-      // In real-life usage, you wouldn't want to immediately prompt someone to login 
-      // like this, for two reasons:
-      // (1) JavaScript created popup windows are blocked by most browsers unless they 
-      // result from direct interaction from people using the app (such as a mouse click)
-      // (2) it is a bad experience to be continually prompted to login upon page load.
-      FB.login(function(response) {
-       // handle the response
-       $('#success_title').html('Success login =)');
-      }, {scope: 'basic_info, email, public_profile,user_photos, user_friends'});
-    } else {
-      // In this case, the person is not logged into Facebook, so we call the login() 
-      // function to prompt them to do so. Note that at this stage there is no indication
-      // of whether they are logged into the app. If they aren't then they'll see the Login
-      // dialog right after they log in to Facebook. 
-      // The same caveats as above apply to the FB.login() call here.
-      FB.login(function(response) {
-       // handle the response
-       $('#success_title').html('Success login =)');
-      }, {scope: 'basic_info, email, public_profile,user_photos, user_friends'});
-    }
-  });
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1480164085544279',
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+
+    FB.getLoginStatus(function(response) {
+      console.log(response);
+      if (response.status === 'connected') {
+        loggedIn = true;
+        testAPI();
+      } else if (response.status === 'not_authorized') {
+        setLoginFunc();
+      } else {
+        setLoginFunc();
+      }
+    });
   };
 
   // Load the SDK asynchronously
@@ -70,15 +47,25 @@
       console.log(response);
     });
   }
+
+  function setLoginFunc() {
+    FB.login(function(response) {
+     // handle the response
+     $('#success_title').html('Success login =)');
+    }, {scope: 'basic_info, email, public_profile,user_photos, user_friends'});
+  }
 </script>
 
 <!--
   Below we include the Login Button social plugin. This button uses the JavaScript SDK to
   present a graphical Login button that triggers the FB.login() function when clicked. -->
 
-<fb:login-button show-faces="true" width="200" max-rows="1" scope="basic_info, email, public_profile,user_photos, user_friends">
+<script type="javascript">
+  if (loggedIn == false) {
+    document.write('<fb:login-button show-faces="true" width="200" max-rows="1" scope="basic_info, email, public_profile,user_photos, user_friends"></fb:login-button>');
+  }
+</script>
 
-</fb:login-button>
 <h1 id='success_title'></h1>
 </body>
 </html>
