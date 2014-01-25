@@ -14,16 +14,11 @@
     xfbml      : true  // parse XFBML
   });
 
-  FB.login(function(response) {
-   // handle the response
-   $('#success_title').html('Success login =)');
-  }, {scope: 'basic_info, email, public_profile,user_photos, user_friends'});
-
   // Here we subscribe to the auth.authResponseChange JavaScript event. This event is fired
   // for any authentication related change, such as login, logout or session refresh. This means that
   // whenever someone who was previously logged out tries to log in again, the correct case below 
   // will be handled. 
-  FB.Event.subscribe('auth.authResponseChange', function(response) {
+  FB.getLoginStatus(function(response) {
     console.log(response);
     debugger;
     // Here we specify what we do with the response anytime this event occurs. 
